@@ -10,11 +10,11 @@ typedef struct {
 } DictionaryEntry;
 
 void compressLZW(const char* input, const char* output) {
-    // Création et initialisation du dictionnaire
+
     DictionaryEntry dictionary[MAX_DICT_SIZE];
-    int dictSize = 256; // Taille initiale du dictionnaire
+    int dictSize = 256;
     for (int i = 0; i < dictSize; i++) {
-        dictionary[i].key = malloc(2); // Une seule lettre
+        dictionary[i].key = sizeof(char);
         dictionary[i].key[0] = (char)i;
         dictionary[i].key[1] = '\0';
         dictionary[i].value = i;
