@@ -10,11 +10,11 @@ typedef struct {
 } DictionaryEntry;
 
 void compressLZW(const char* input, const char* output) {
-
+    // Création et initialisation du dictionnaire
     DictionaryEntry dictionary[MAX_DICT_SIZE];
-    int dictSize = 256;
+    int dictSize = 256; // Taille initiale du dictionnaire
     for (int i = 0; i < dictSize; i++) {
-        dictionary[i].key = malloc(sizeof(char));
+        dictionary[i].key = malloc(2); // Une seule lettre
         dictionary[i].key[0] = (char)i;
         dictionary[i].key[1] = '\0';
         dictionary[i].value = i;
@@ -66,8 +66,8 @@ void compressLZW(const char* input, const char* output) {
     }
 }
 
-int main() {
-    const char* inputFileName = "input.txt";
+int main(int argc, char const *argv[]) {
+    const char* inputFileName = argv[1];
     const char* compressedFileName = "compressed.txt";
 
     compressLZW(inputFileName, compressedFileName);
