@@ -14,7 +14,7 @@ void compressLZW(const char* input, const char* output) {
     DictionaryEntry dictionary[MAX_DICT_SIZE];
     int dictSize = 256;
     for (int i = 0; i < dictSize; i++) {
-        dictionary[i].key = sizeof(char);
+        dictionary[i].key = malloc(sizeof(char));
         dictionary[i].key[0] = (char)i;
         dictionary[i].key[1] = '\0';
         dictionary[i].value = i;
