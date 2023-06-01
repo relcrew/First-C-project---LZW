@@ -2,27 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_DICT_SIZE 4096
+#define MAX_DICT_SIZE 5000
+#define SINGLE_VALUE_ASCII 256
 
 typedef struct {
     char* key;
     int value;
-} DictionaryEntry;
+} Dictionary;
 
-void LZW(const char* input, const char* output) {
-    DictionaryEntry dictionary[MAX_DICT_SIZE];
-    int dictSize = 256; 
-    for (int i = 0; i < dictSize; i++) {
+void createDictionary(Dictionary* dictionary){
+    for (int i = 0; i < SINGLE_VALUE_ASCII; i++) {
         dictionary[i].key = malloc(sizeof(char)); 
         dictionary[i].key[0] = (char)i;
         dictionary[i].value = i;
     }
+}
+
+void LZW(const char* input, const char* output) {
+    Dictionary dictionary[5000];
+    createDictionary(dictionary);
+
+    int dictSizeSingleValue = 256; 
 
     FILE* inputFile = fopen(input, "r");
     FILE* outputFile = fopen(output, "w");
 
     char currentChar;
-    char previousChar = fgetc(inputFile); //renvoie la valeur ascii de la 1ere valeur du FILE
+    char previousChar = fgetc(inputFile);
 
     while ((currentChar = fgetc(inputFile)) != EOF) {
         char* key = malloc(strlen(dictionary[previousChar].key));
@@ -30,7 +36,7 @@ void LZW(const char* input, const char* output) {
         key[strlen(key)] = currentChar;
 
         int found = 0;
-        for (int i = 0; i < dictSize; i++) {
+        for (int i = 0; i < dictSizeSingleValue; i++) {
             if (strcmp(key, dictionary[i].key) == 0) {
                 previousChar = dictionary[i].value;
                 found = 1;
@@ -40,10 +46,10 @@ void LZW(const char* input, const char* output) {
 
         if (found==0) {
             fprintf(outputFile, "%d ", dictionary[previousChar].value);
-            dictionary[dictSize].key = malloc(strlen(key));
-            strcpy(dictionary[dictSize].key, key);
-            dictionary[dictSize].value = dictSize;
-            dictSize++;
+            dictionary[dictSizeSingleValue].key = malloc(strlen(key));
+            strcpy(dictionary[dictSizeSingleValue].key, key);
+            dictionary[dictSizeSingleValue].value = dictSizeSingleValue;
+            dictSizeSingleValue++;
 
             previousChar = currentChar;
         }
@@ -56,7 +62,7 @@ void LZW(const char* input, const char* output) {
     fclose(inputFile);
     fclose(outputFile);
 
-    for (int i = 0; i < dictSize; i++) {
+    for (int i = 0; i < dictSizeSingleValue; i++) {
         free(dictionary[i].key);
     }
 }
