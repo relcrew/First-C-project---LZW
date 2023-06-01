@@ -30,12 +30,13 @@ void LZW(const char* input, const char* output) {
     char currentChar;
     char previousChar = fgetc(inputFile);
 
-    while ((currentChar = fgetc(inputFile)) != EOF) {
+    while ((currentChar = fgetc(inputFile)) != -1) {
         char* key = malloc(strlen(dictionary[previousChar].key));
         strcpy(key, dictionary[previousChar].key);
         key[strlen(key)] = currentChar;
 
         int found = 0;
+        
         for (int i = 0; i < dictSizeSingleValue; i++) {
             if (strcmp(key, dictionary[i].key) == 0) {
                 previousChar = dictionary[i].value;
