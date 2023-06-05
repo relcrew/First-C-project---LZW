@@ -3,18 +3,18 @@
 #include <string.h>
 
 #define MAX_DICT_SIZE 5000
-#define SINGLE_VALUE_ASCII 256
+#define SINGLE_KEY_ASCII 256
 
 typedef struct {
-    char* key;
-    int value;
+    char* value;
+    int key;
 } Dictionary;
 
 void createDictionary(Dictionary* dictionary){
-    for (int i = 0; i < SINGLE_VALUE_ASCII; i++) {
-        dictionary[i].key = malloc(sizeof(char)); 
-        dictionary[i].key[0] = (char)i;
-        dictionary[i].value = i;
+    for (int i = 0; i < SINGLE_KEY_ASCII; i++) {
+        dictionary[i].value = malloc(sizeof(char));
+        dictionary[i].value[0] = (char)i;
+        dictionary[i].key = i;
     }
 }
 
@@ -22,7 +22,7 @@ void LZW(const char* input, const char* output) {
     Dictionary dictionary[5000];
     createDictionary(dictionary);
 
-    int dictSizeSingleValue = 256; 
+    int dictSize = 256;
 
     FILE* inputFile = fopen(input, "r");
     FILE* outputFile = fopen(output, "w");
@@ -31,40 +31,37 @@ void LZW(const char* input, const char* output) {
     char previousChar = fgetc(inputFile);
 
     while ((currentChar = fgetc(inputFile)) != -1) {
-        char* key = malloc(strlen(dictionary[previousChar].key));
-        strcpy(key, dictionary[previousChar].key);
-        key[strlen(key)] = currentChar;
+        char* value = malloc(strlen(dictionary[previousChar].value));
+        strcpy(value, dictionary[previousChar].value);
+        value[strlen(value)] = currentChar;
 
         int found = 0;
-        
-        for (int i = 0; i < dictSizeSingleValue; i++) {
-            if (strcmp(key, dictionary[i].key) == 0) {
-                previousChar = dictionary[i].value;
-                found = 1;
+
+        for (int i = 0; i < dictSize; i++) {
+            if (strcmp(value, dictionary[i].value) == 0) {
+                previousChar = dictionary[i].key;
                 break;
             }
         }
 
         if (found==0) {
-            fprintf(outputFile, "%d ", dictionary[previousChar].value);
-            dictionary[dictSizeSingleValue].key = malloc(strlen(key));
-            strcpy(dictionary[dictSizeSingleValue].key, key);
-            dictionary[dictSizeSingleValue].value = dictSizeSingleValue;
-            dictSizeSingleValue++;
+            fprintf(outputFile, "%d ", dictionary[previousChar].key);
+            dictionary[dictSize].value = malloc(strlen(value));
+            strcpy(dictionary[dictSize].value, value);
+            dictionary[dictSize].key = dictSize;
+            dictSize++;
 
             previousChar = currentChar;
         }
 
-        free(key);
+        free(value);
     }
-
-    fwrite(&dictionary[previousChar].value, sizeof(int), 1, outputFile);
 
     fclose(inputFile);
     fclose(outputFile);
 
-    for (int i = 0; i < dictSizeSingleValue; i++) {
-        free(dictionary[i].key);
+    for (int i = 0; i < dictSize; i++) {
+        free(dictionary[i].value);
     }
 }
 
