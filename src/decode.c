@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAX_DICT_SIZE 4096
-#define CLEAR_CODE 256
-#define END_CODE 257
+#include "../include/decode.h"
 
 char** create_dico(int code) {
     char** dico = (char**)malloc(sizeof(char*) * code);
@@ -16,7 +10,7 @@ char** create_dico(int code) {
     return dico;
 }
 
-int find(char** dict, int size, char* input) {
+int find_decode(char** dict, int size, char* input) {
     for (int i = 0; i < size; i++) {
         if (dict[i] && strcmp(dict[i], input) == 0) {
             return i;
@@ -25,8 +19,7 @@ int find(char** dict, int size, char* input) {
     return -1;
 }
 
-void decoder() {
-    /* en construction */
+void decoder(char*path) {
 
     char code[4] = "";
     char seq[50] = "";
@@ -35,8 +28,8 @@ void decoder() {
     char last_valid[50] = "";
     char** dict = NULL;
 
-    FILE* inputFile = fopen("input.txt", "r");
-    FILE* outputFile = fopen("output.txt", "w");
+    FILE* inputFile = fopen(path, "r");
+    FILE* outputFile = fopen("../input/input.txt", "w");
 
     while (fscanf(inputFile, "%s", code) == 1) {
 
@@ -76,9 +69,4 @@ void decoder() {
 
     fclose(inputFile);
     fclose(outputFile);
-}
-
-int main(int argc, char const* argv[]) {
-    decoder();
-    return 0;
 }

@@ -1,20 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAX_DICT_SIZE 4096
-#define CLEAR_CODE 256
-#define END_CODE 257
-
-typedef struct {
-    char* key;
-    int value;
-} Entry;
-
-typedef struct {
-    Entry** entries;
-    int size;
-} HashTable;
+#include "../include/encode.h"
 
 unsigned int hash(const char* key, int tableSize) {
     unsigned int hashValue = 0;
@@ -25,6 +9,22 @@ unsigned int hash(const char* key, int tableSize) {
     }
 
     return hashValue % tableSize;
+}
+
+void free_dict(HashTable* dict) {
+    if (dict == NULL) {
+        return;
+    }
+
+    for (int i = 0; i < dict->size; i++) {
+        if (dict->entries[i] != NULL) {
+            free(dict->entries[i]->key);
+            free(dict->entries[i]);
+        }
+    }
+
+    free(dict->entries);
+    free(dict);
 }
 
 void insert(HashTable* table, const char* key, int value) {
@@ -40,6 +40,7 @@ void insert(HashTable* table, const char* key, int value) {
 
     table->entries[index] = entry;
 }
+
 HashTable* createHashTable(int size) {
     HashTable* table = (HashTable*)malloc(sizeof(HashTable));
     table->entries = (Entry**)malloc(sizeof(Entry*) * size);
@@ -55,11 +56,11 @@ HashTable* createHashTable(int size) {
     return table;
 }
 
-int find(HashTable* table, const char* key) {
-    unsigned int index = hash(key, table->size);
+int find(HashTable* table, const char* value) {
+    unsigned int index = hash(value, table->size);
 
     while (table->entries[index] != NULL) {
-        if (strcmp(table->entries[index]->key, key) == 0) {
+        if (strcmp(table->entries[index]->key, value) == 0) {
             return table->entries[index]->value;
         }
 
@@ -69,15 +70,15 @@ int find(HashTable* table, const char* key) {
     return -1;
 }
 
-void encoder() {
+void encoder(char*path) {
     int size = 258;
-    HashTable* dict = createHashTable(100000);
+    HashTable* dict = createHashTable(MAX_DICT_SIZE);
 
     char input;
     char last_valid[50] = "";
 
-    FILE* inputFile = fopen("input.txt", "r");
-    FILE* outputFile = fopen("output.txt", "w");
+    FILE* inputFile = fopen(path, "r");
+    FILE* outputFile = fopen("./output/output.txt", "w");
 
     fprintf(outputFile, "%d ", CLEAR_CODE);
 
@@ -105,13 +106,9 @@ void encoder() {
     }
 
     fprintf(outputFile, "%d ", find(dict, last_valid));
+    free_dict(dict);
     fprintf(outputFile, "%d", END_CODE);
 
     fclose(inputFile);
     fclose(outputFile);
-}
-
-int main(){
-    encoder();
-    return 0;
 }
