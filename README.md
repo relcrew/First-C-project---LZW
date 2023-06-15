@@ -33,11 +33,11 @@ Le decodage LZW comprend les étapes suivantes :
 
 utiliser `make`
 
-Pour exécuter le programme, utilisez la commande `./main '-e ou -d' input/nomDeMonFichier.txt` dans le dossier du projet. `-e` pour l'encodage et `-d` pour le décodage.
+Pour exécuter le programme, utilisez la commande `./main '-e'` pour decoder remplacer le `-e` par le `-d` dans le dossier du projet. `-e` pour l'encodage et `-d` pour le décodage. l'input est l'input de l'encodage et l'output de decodage et inversement.
 
 ## État final du projet :
 
-- Encodeur ASCII -> en partie fonctionnel 
+- Encodeur ASCII -> fonctionnel 
 - Décodeur ASCII -> en partie fonctionnel 
 
 Fichiers testés :
@@ -47,11 +47,13 @@ Fichiers testés :
 ## Répartition du travail
 
 Maurice Romain :
+- Implémentation du décodeur ASCII
 - Implémentation de l'encodeur ASCII
 - Tests et débogage
 
 Viry Corentin :
 - Implémentation du décodeur ASCII
+- Implémentation de l'encodeur ASCII
 - Tests et débogage
 
 ## Bilan du Groupe

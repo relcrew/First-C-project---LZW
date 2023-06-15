@@ -1,4 +1,4 @@
-#include "../include/encode.h"
+#include "../include/code.h"
 
 unsigned int hash(const char* key, int tableSize) {
     unsigned int hashValue = 0;
@@ -67,47 +67,4 @@ int find(HashTable* table, const char* value) {
     }
 
     return -1;
-}
-
-void encoder(char*path) {
-    int size = 258;
-    HashTable* dict = createHashTable(MAX_DICT_SIZE);
-
-    char input;
-    char last_valid[50] = "";
-
-    FILE* inputFile = fopen(path, "r");
-    FILE* outputFile = fopen("./output/output.txt", "w");
-
-    fprintf(outputFile, "%d ", CLEAR_CODE);
-
-    while (!feof(inputFile)) {
-        input = fgetc(inputFile);
-        if (input == -1) {
-            break;
-        }
-
-        char* try = (char*)malloc((strlen(last_valid) + 2) * sizeof(char));
-        strcpy(try, last_valid);
-        try[strlen(last_valid)] = input;
-        try[strlen(last_valid) + 1] = '\0';
-
-        if (find(dict, try) != -1) {
-            strcpy(last_valid, try);
-        } else {
-            fprintf(outputFile, "%d ", find(dict, last_valid));
-            insert(dict, try, size);
-            size++;
-            strcpy(last_valid, (char[2]) {input, '\0'});
-        }
-
-        free(try);
-    }
-
-    fprintf(outputFile, "%d ", find(dict, last_valid));
-    free_dict(dict);
-    fprintf(outputFile, "%d", END_CODE);
-
-    fclose(inputFile);
-    fclose(outputFile);
 }

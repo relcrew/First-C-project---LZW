@@ -19,7 +19,21 @@ typedef struct {
     int size;
 } HashTable;
 
-void encoder(char*path);
+void encoder();
+
+void decoder();
+
+void insert(HashTable* table, const char* key, int value);
+
+HashTable* createHashTable(int size);
+
+int find(HashTable* table, const char* value);
+
+unsigned int hash(const char* key, int tableSize);
+
+void free_dict(HashTable* dict);
+
+
 
 
 #endif
