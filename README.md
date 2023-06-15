@@ -37,8 +37,8 @@ Pour exécuter le programme, utilisez la commande `./main '-e ou -d' input/nomDe
 
 ## État final du projet :
 
-- Encodeur ASCII -> fonctionnel (lent)
-- Décodeur ASCII -> fonctionnel (lent)
+- Encodeur ASCII -> en partie fonctionnel 
+- Décodeur ASCII -> en partie fonctionnel 
 
 Fichiers testés :
 

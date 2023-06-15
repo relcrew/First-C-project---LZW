@@ -63,7 +63,6 @@ int find(HashTable* table, const char* value) {
         if (strcmp(table->entries[index]->key, value) == 0) {
             return table->entries[index]->value;
         }
-
         index = (index + 1) % table->size;
     }
 

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_DICT_SIZE 4096
+#define MAX_DICT_SIZE 1000000
 #define CLEAR_CODE 256
 #define END_CODE 257
 
